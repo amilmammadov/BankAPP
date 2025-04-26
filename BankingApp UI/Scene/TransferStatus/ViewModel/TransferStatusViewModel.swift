@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+final class TransferStatusViewModel {
+    
+    let benefName: String
+    let amount: String
+    
+    init(benefName: String, amount: String) {
+        self.benefName = benefName
+        self.amount = amount
+    }
+}

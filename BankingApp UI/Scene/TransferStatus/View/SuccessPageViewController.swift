@@ -13,13 +13,12 @@ protocol SuccessPageViewControllerDelegate: AnyObject {
 
 final class SuccessPageViewController: UIViewController {
     
+    var viewModel: TransferStatusViewModel?
+    
     private let imageView = UIImageView()
     private let titleLabel = BASimpleTextLabel(fontSize: 20, color: .label, isBold: true)
     private let viewReceiptButton = BACustomTextButton(StringConstants.viewReceipt)
     private let closeButton = BACustomFilledButton(StringConstants.close)
-    
-    private let benefName: String
-    private let amount: String
     
     weak var delegate: SuccessPageViewControllerDelegate?
 
@@ -32,22 +31,12 @@ final class SuccessPageViewController: UIViewController {
         view.backgroundColor = .systemBackground
     }
     
-    init(benefName: String, amount: String){
-        self.benefName = benefName
-        self.amount = amount
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     private func configure(){
         
         imageView.image = Images.successPageImage
         
         titleLabel.numberOfLines = 2
-        titleLabel.text = "\(amount) has been sent to \(benefName)!"
+        titleLabel.text = "\(viewModel?.amount ?? "") has been sent to \(viewModel?.benefName ?? "")!"
         titleLabel.textAlignment = .center
         
         closeButton.addTarget(self, action: #selector(isCloseButtonTapped), for: .touchUpInside)

@@ -9,7 +9,7 @@ import UIKit
 
 final class MoneyTransferViewController: UIViewController {
     
-    private let customer: Customer
+    var viewModel: MoneyTransferViewModel?
     
     private let customerImage = UIImageView()
     private let customerName = BASimpleTextLabel(fontSize: 20, color: .label, isBold: true)
@@ -30,25 +30,15 @@ final class MoneyTransferViewController: UIViewController {
         configureLayout()
         configure()
         configureTransactionFund()
-    }
-    
-    init(customer: Customer) {
-        
-        self.customer = customer
-        super.init(nibName: nil, bundle: nil)
-        self.setData()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        setData()
     }
     
     private func setData(){
         
-        customerImage.image = UIImage(named: customer.imageName)
-        customerName.text = customer.customerName
+        customerImage.image = UIImage(named: viewModel?.customer.imageName ?? "")
+        customerName.text = viewModel?.customer.customerName
         
-        secretPan.text = customer.secretPan
+        secretPan.text =  viewModel?.customer.secretPan
         selectAccount.text = StringConstants.selectAccount
         
         feeCalculationMethod.text = "No fee"
@@ -88,8 +78,9 @@ extension MoneyTransferViewController {
     
     @objc func isSendButtonTapped(){
         
-        let successPageViewController = SuccessPageViewController(benefName: customer.customerName, amount: transactionFund.text ?? "")
+        let successPageViewController = SuccessPageViewController()
         successPageViewController.modalPresentationStyle = .overFullScreen
+        successPageViewController.viewModel = TransferStatusViewModel(benefName: viewModel?.customer.customerName ?? "", amount: transactionFund.text ?? "")
         successPageViewController.delegate = self
         present(successPageViewController, animated: true)
     }

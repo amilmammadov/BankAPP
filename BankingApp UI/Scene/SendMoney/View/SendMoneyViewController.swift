@@ -61,7 +61,8 @@ extension SendMoneyViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let moneyTransferViewController = MoneyTransferViewController(customer: Customer.customers[indexPath.item])
+        let moneyTransferViewController = MoneyTransferViewController()
+        moneyTransferViewController.viewModel = MoneyTransferViewModel(customer: Customer.customers[indexPath.item])
         navigationController?.pushViewController(moneyTransferViewController, animated: true)
     }
 }

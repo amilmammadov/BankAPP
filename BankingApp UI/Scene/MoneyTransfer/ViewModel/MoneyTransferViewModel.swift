@@ -6,3 +6,12 @@
 //
 
 import Foundation
+
+final class MoneyTransferViewModel {
+    
+    var customer: Customer
+    
+    init(customer: Customer) {
+        self.customer = customer
+    }
+}
