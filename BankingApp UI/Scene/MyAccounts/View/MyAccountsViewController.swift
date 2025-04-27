@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AccountsViewController: UIViewController {
+final class MyAccountsViewController: UIViewController {
     
     private lazy var bankCardsCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createBankCardsLayout())
@@ -22,6 +22,8 @@ final class AccountsViewController: UIViewController {
     private let moreView = TopCircleBottomLabelView(image: Images.more ?? UIImage(), title: StringConstants.more)
     
     private let recentTransactionsView = RecentTransactionView()
+    
+    var myAccountsViewModel: MyAccountsViewModelProtocol?
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,18 +86,17 @@ final class AccountsViewController: UIViewController {
     }
 }
 
-extension AccountsViewController {
+extension MyAccountsViewController {
     
     @objc func goToSendMoneyViewController(){
-        let sendMoneyViewController = SendMoneyViewController()
         tabBarController?.isTabBarHidden = true
-        navigationController?.pushViewController(sendMoneyViewController, animated: true)
+        myAccountsViewModel?.navigateToSendMoneyPage()
     }
     
     @objc func isBellButtonTapped(){}
 }
 
-extension AccountsViewController: UICollectionViewDataSource{
+extension MyAccountsViewController: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         BankCard.bankCards.count
@@ -108,7 +109,7 @@ extension AccountsViewController: UICollectionViewDataSource{
     }
 }
 
-extension AccountsViewController: UICollectionViewDelegateFlowLayout {
+extension MyAccountsViewController: UICollectionViewDelegateFlowLayout {
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let layout = bankCardsCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
@@ -123,7 +124,7 @@ extension AccountsViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension AccountsViewController {
+extension MyAccountsViewController {
     
     private func configureLayout(){
         

@@ -7,20 +7,18 @@
 
 import UIKit
 
-protocol SuccessPageViewControllerDelegate: AnyObject {
-    func didFinishSuccessFlow()
+protocol TransferStatusViewControllerDelegate: AnyObject {
+    func isCloseButtonTapped()
 }
 
-final class SuccessPageViewController: UIViewController {
+final class TransferStatusViewController: UIViewController {
     
-    var viewModel: TransferStatusViewModel?
+    var viewModel: TransferStatusViewModelProtocol?
     
     private let imageView = UIImageView()
     private let titleLabel = BASimpleTextLabel(fontSize: 20, color: .label, isBold: true)
     private let viewReceiptButton = BACustomTextButton(StringConstants.viewReceipt)
     private let closeButton = BACustomFilledButton(StringConstants.close)
-    
-    weak var delegate: SuccessPageViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +28,8 @@ final class SuccessPageViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
     }
+    
+    weak var delegate: TransferStatusViewControllerDelegate?
     
     private func configure(){
         
@@ -43,15 +43,14 @@ final class SuccessPageViewController: UIViewController {
     }
 }
 
-extension SuccessPageViewController {
+extension TransferStatusViewController {
     
     @objc func isCloseButtonTapped(){
-        dismiss(animated: true)
-        delegate?.didFinishSuccessFlow()
+        delegate?.isCloseButtonTapped()
     }
 }
 
-extension SuccessPageViewController {
+extension TransferStatusViewController {
     
     private func configureLayout(){
         

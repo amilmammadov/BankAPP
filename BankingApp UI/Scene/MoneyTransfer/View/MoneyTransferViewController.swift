@@ -35,10 +35,10 @@ final class MoneyTransferViewController: UIViewController {
     
     private func setData(){
         
-        customerImage.image = UIImage(named: viewModel?.customer.imageName ?? "")
-        customerName.text = viewModel?.customer.customerName
+        customerImage.image = UIImage(named: viewModel?.customer?.imageName ?? "")
+        customerName.text = viewModel?.customer?.customerName
         
-        secretPan.text =  viewModel?.customer.secretPan
+        secretPan.text =  viewModel?.customer?.secretPan
         selectAccount.text = StringConstants.selectAccount
         
         feeCalculationMethod.text = "No fee"
@@ -78,23 +78,12 @@ extension MoneyTransferViewController {
     
     @objc func isSendButtonTapped(){
         
-        let successPageViewController = SuccessPageViewController()
-        successPageViewController.modalPresentationStyle = .overFullScreen
-        successPageViewController.viewModel = TransferStatusViewModel(benefName: viewModel?.customer.customerName ?? "", amount: transactionFund.text ?? "")
-        successPageViewController.delegate = self
-        present(successPageViewController, animated: true)
+        viewModel?.presentTranferStautusPage(benefName: viewModel?.customer?.customerName ?? "", amount: transactionFund.text ?? "", viewController: self)
     }
     
     @objc func handleAccountSelectView(){
         
-        let customerAccountsViewController = CustomerAccountsViewController()
-        customerAccountsViewController.delegate = self
-        
-        if let sheet = customerAccountsViewController.sheetPresentationController {
-            sheet.detents = [.medium()]
-        }
-        
-        present(customerAccountsViewController, animated: true)
+        viewModel?.presentCustomerAccountsPage(self)
     }
 }
 
@@ -118,14 +107,14 @@ extension MoneyTransferViewController: CustomerAccountsViewControllerDelegate {
     func didAccountSelected(_ bankCard: BankCard) {
         accountSelectView.balance.text = bankCard.balance
         accountSelectView.secretPan.text = bankCard.secretPan
-        dismiss(animated: true)
+        viewModel?.dismissCustomerAccountsPage()
     }
 }
 
-extension MoneyTransferViewController: SuccessPageViewControllerDelegate {
+extension MoneyTransferViewController: TransferStatusViewControllerDelegate {
     
-    func didFinishSuccessFlow() {
-        navigationController?.popToRootViewController(animated: false)
+    func isCloseButtonTapped() {
+        viewModel?.dismissAndPopToRoot()
     }
 }
 

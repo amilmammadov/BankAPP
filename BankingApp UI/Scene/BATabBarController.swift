@@ -7,47 +7,53 @@
 
 import UIKit
 
-class BATabBarController: UITabBarController {
+struct TabItem {
+    let title: String
+    let image: UIImage
+}
 
+class BATabBarController: UITabBarController {
+    
+    private let tabBarTabs: [TabItem] = [
+        .init(title: StringConstants.accounts, image: Images.accounts ?? UIImage()),
+        .init(title: StringConstants.statistics, image: Images.statistics ?? UIImage()),
+        .init(title: StringConstants.cashbacks, image: Images.cashbacks ?? UIImage()),
+        .init(title: StringConstants.settings, image: Images.settings ?? UIImage()),
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        configure()
-    }
-    
-    private func configure(){
-        
-        viewControllers = [
-            configureAccountsViewController(),
-            configureStatisticsViewController(),
-            configureCashbacksViewController(),
-            configureSettingsViewController()
-        ]
         
         tabBar.backgroundColor = .systemBackground
+        configureCoordinators()
     }
     
-    private func configureAccountsViewController() -> UINavigationController {
-        let accountsViewController = AccountsViewController()
-        accountsViewController.tabBarItem = UITabBarItem(title: StringConstants.accounts, image: Images.accounts, tag: 0)
-        return UINavigationController(rootViewController: accountsViewController)
-    }
-    
-    private func configureStatisticsViewController() -> UINavigationController {
-        let statisticsViewController = StatisticsViewController()
-        statisticsViewController.tabBarItem = UITabBarItem(title: StringConstants.statistics, image: Images.statistics, tag: 1)
-        return UINavigationController(rootViewController: statisticsViewController)
-    }
-    
-    private func configureCashbacksViewController() -> UINavigationController {
-        let cashbacksViewController = CasbackViewController()
-        cashbacksViewController.tabBarItem = UITabBarItem(title: StringConstants.cashbacks, image: Images.cashbacks, tag: 2)
-        return UINavigationController(rootViewController: cashbacksViewController)
-    }
-    
-    private func configureSettingsViewController() -> UINavigationController {
-        let settingsViewController = SettingsViewController()
-        settingsViewController.tabBarItem = UITabBarItem(title: StringConstants.settings, image: Images.settings, tag: 3)
-        return UINavigationController(rootViewController: settingsViewController)
+    private func configureCoordinators(){
+        
+        let myAccountsCoordinator = MyAccountsCoordinator(navigationController: UINavigationController())
+        myAccountsCoordinator.start()
+        
+        let statisticsCoordinator = StatisticsCoordinator(navigationController: UINavigationController())
+        statisticsCoordinator.start()
+        
+        let cashbacksCoordinator = CashbacksCoordinator(navigationController: UINavigationController())
+        cashbacksCoordinator.start()
+        
+        let settingsCoordinator = SettingsCoordinator(navigationController: UINavigationController())
+        settingsCoordinator.start()
+        
+        viewControllers = [
+            myAccountsCoordinator.navigationController,
+            statisticsCoordinator.navigationController,
+            cashbacksCoordinator.navigationController,
+            settingsCoordinator.navigationController
+        ]
+        
+        viewControllers?.enumerated().forEach({ index, viewController in
+            
+            let tabData = tabBarTabs[index]
+            
+            viewController.tabBarItem = UITabBarItem(title: tabData.title, image: tabData.image, tag: index)
+        })
     }
 }

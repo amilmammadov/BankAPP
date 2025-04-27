@@ -7,13 +7,13 @@
 
 import Foundation
 
-final class TransferStatusViewModel {
+protocol TransferStatusViewModelProtocol {
+    var benefName: String? { get set }
+    var amount: String? { get set }
+}
+
+final class TransferStatusViewModel: TransferStatusViewModelProtocol {
     
-    let benefName: String
-    let amount: String
-    
-    init(benefName: String, amount: String) {
-        self.benefName = benefName
-        self.amount = amount
-    }
+    var benefName: String?
+    var amount: String?
 }

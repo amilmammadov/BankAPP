@@ -5,13 +5,34 @@
 //  Created by Amil Mammadov on 26.04.25.
 //
 
-import Foundation
+import UIKit
 
-final class MoneyTransferViewModel {
+protocol MoneyTransferViewModelProtocol {
+    func presentTranferStautusPage(benefName: String, amount: String, viewController: UIViewController & TransferStatusViewControllerDelegate)
+    func presentCustomerAccountsPage(_ viewController: UIViewController & CustomerAccountsViewControllerDelegate)
+    func dismissCustomerAccountsPage()
+    var customer: Customer? { get set }
+}
+
+final class MoneyTransferViewModel: MoneyTransferViewModelProtocol {
+
+    var customer: Customer?
+    var moneyTransferCoordinator: MoneyTransferCoordinator?
     
-    var customer: Customer
+    func presentTranferStautusPage(benefName: String, amount: String, viewController: UIViewController & TransferStatusViewControllerDelegate) {
+        
+        moneyTransferCoordinator?.presentTransferStatusPage(benefName: benefName, amount: amount, viewController: viewController)
+    }
     
-    init(customer: Customer) {
-        self.customer = customer
+    func presentCustomerAccountsPage(_ viewController: UIViewController & CustomerAccountsViewControllerDelegate){
+        moneyTransferCoordinator?.presentCustomerAccounts(viewController)
+    }
+        
+    func dismissCustomerAccountsPage(){
+        moneyTransferCoordinator?.dismissCustomerAccounts()
+    }
+    
+    func dismissAndPopToRoot(){
+        moneyTransferCoordinator?.dismissAndPopToRoot()
     }
 }

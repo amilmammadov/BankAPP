@@ -15,7 +15,9 @@ final class SendMoneyViewController: UIViewController {
         tableView.register(CustomerCell.self, forCellReuseIdentifier: CustomerCell.reuseId)
         return tableView
     }()
-
+    
+    var sendMoneyViewModel: SendMoneyViewModelProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -61,9 +63,7 @@ extension SendMoneyViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let moneyTransferViewController = MoneyTransferViewController()
-        moneyTransferViewController.viewModel = MoneyTransferViewModel(customer: Customer.customers[indexPath.item])
-        navigationController?.pushViewController(moneyTransferViewController, animated: true)
+        sendMoneyViewModel?.navigateToMoneyTransfer(Customer.customers[indexPath.item])
     }
 }
 

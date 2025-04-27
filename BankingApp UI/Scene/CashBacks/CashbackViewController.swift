@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CasbackViewController: UIViewController {
+class CashbackViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
